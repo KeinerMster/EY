@@ -1,21 +1,4 @@
-name: Construir APK de Cosmódromo
-
-on:
-  workflow_dispatch:
-  push:
-    branches: [main, master]
-
-permissions:
-  contents: read
-
-jobs:
-  build-apk:
-    name: Compilar APK Android
-    runs-on: ubuntu-latest
-    timeout-minutes: 35
-    steps:
-      - name: Descargar el repositorio
-        uses: actions/checkout@v4
+          done
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
