@@ -1,0 +1,76 @@
+name: Construir APK de Cosmódromo
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    name: Compilar APK Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Configurar Java para Android
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Preparar proyecto web de Capacitor
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p mobile-build/www
+          cp index.html mobile-build/www/
+          cp -R css js wasm lib mobile-build/www/
+          cd mobile-build
+          npm init -y
+          npm install --no-audit --no-fund @capacitor/core@6 @capacitor/android@6
+          npm install --no-save --no-audit --no-fund @capacitor/cli@6
+          cat > capacitor.config.json <<'JSON'
+          {
+            "appId": "com.cosmodromo.game",
+            "appName": "Cosmódromo",
+            "webDir": "www",
+            "server": {
+              "androidScheme": "https",
+              "cleartext": false
+            },
+            "android": {
+              "allowMixedContent": false
+            }
+          }
+          JSON
+          npx cap add android
+          npx cap sync android
+
+      - name: Compilar APK de prueba
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd mobile-build/android
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+
+      - name: Publicar APK como artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cosmodromo-Android-APK
+          path: mobile-build/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
