@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <title>Cosmódromo · Expedición planetaria</title>
+  <link rel="stylesheet" href="css/style.css?v=20261015-mobile-e-v2" />
+</head>
+<body>
+  <div id="stage" aria-label="Escena tridimensional del sistema solar"></div>
+  <div id="grain"></div>
+
+  <main id="menu">
+    <section class="mission-console">
+      <div class="eyebrow">Centro de vuelo · 01</div>
+      <h1>Elige tu próxima ventana de lanzamiento.</h1>
+      <p class="lede">Pilota una nave de acero de dos etapas durante el ascenso, la travesía interplanetaria y la maniobra final. Cada destino cambia la gravedad y el margen de error.</p>
+      <div class="mode-switch" role="tablist" aria-label="Modo de juego">
+        <button class="active" id="campaign-tab" role="tab" aria-selected="true">CAMPAÑA</button>
+        <button id="free-tab" role="tab" aria-selected="false">SIMULACIÓN LIBRE</button>
+      </div>
+      <p class="section-label">Niveles / destino</p>
+      <div class="mission-list" id="mission-list"></div>
+      <section class="brief" aria-live="polite">
+        <div class="brief-head">
+          <div><span class="eyebrow" id="brief-code">NIVEL 01</span><h2 id="brief-name">Órbita azul</h2></div>
+          <span class="difficulty" id="brief-difficulty">● INICIAL</span>
+        </div>
+        <p id="brief-desc"></p>
+        <div class="mission-stats">
+          <div><span>Gravedad</span><b id="stat-gravity">1.00 g</b></div>
+          <div><span>Distancia</span><b id="stat-distance">0 km</b></div>
+          <div><span>Final</span><b id="stat-final">ATERRIZAJE</b></div>
+        </div>
+        <div class="surface-status">
+          <div><b id="base-location">Base · Tierra</b><span id="base-status">Explora la superficie y construye el complejo antes de despegar.</span></div>
+          <button id="surface-ops">EXPLORAR</button>
+        </div>
+        <button class="launch-button" id="launch">Preparar base de lanzamiento</button>
+      </section>
+    </section>
+    <div class="preview-label" aria-hidden="true"><span>Destino seleccionado</span><b id="preview-name">TIERRA</b></div>
+  </main>
+
+  <section id="game-ui" class="hidden" aria-label="Panel de vuelo">
+    <div class="topbar">
+      <div class="phase-block">
+        <div class="phase-name"><span id="phase-name">Fase 1 · Ascenso</span><span id="phase-index">01/03</span></div>
+        <div class="phase-rail"><i id="phase-progress"></i></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <div class="mission-block"><b id="hud-mission">Órbita azul</b><span id="hud-destination">Destino · Tierra</span></div>
+        <button class="pause-btn" id="pause" aria-label="Pausar simulación">Ⅱ</button>
+      </div>
+    </div>
+    <div class="telemetry">
+      <div class="telemetry-row"><span>Altitud</span><b id="t-alt">0.0 km</b></div>
+      <div class="telemetry-row"><span>Velocidad</span><b id="t-speed">0 m/s</b></div>
+      <div class="telemetry-row"><span>Combustible</span><b id="t-fuel">100 %</b></div>
+      <div class="telemetry-row"><span>Inclinación</span><b id="t-tilt">0.0°</b></div>
+      <div class="telemetry-row"><span>Potencia</span><b id="t-thrust">0 %</b></div>
+    </div>
+    <div class="objective-card"><span class="label">Objetivo actual</span><p id="objective">Aumenta potencia y mantén la nave dentro del corredor de ascenso.</p></div>
+    <div class="center-reticle" aria-hidden="true"><i></i></div>
+    <div class="controls-hint"><kbd>W/S</kbd> POTENCIA &nbsp; <kbd>←/→</kbd> DIRECCIÓN &nbsp; <kbd>ESPACIO</kbd> ESTABILIZAR</div>
+    <div class="touch-controls" aria-label="Controles táctiles">
+      <div class="touch-cluster"><button class="touch-btn" data-key="left" aria-label="Inclinar a la izquierda">←</button><button class="touch-btn" data-key="right" aria-label="Inclinar a la derecha">→</button></div>
+      <div class="touch-cluster thrust"><button class="touch-btn" data-key="up" aria-label="Aumentar potencia">▲</button><button class="touch-btn" data-key="down" aria-label="Reducir potencia">▼</button></div>
+    </div>
+  </section>
+
+  <div class="overlay hidden" id="countdown" aria-live="assertive"><div class="countdown"><span>Ignición confirmada</span><strong id="count-num">3</strong></div></div>
+  <div class="overlay hidden" id="pause-dialog">
+    <div class="dialog"><div class="eyebrow">Telemetría en espera</div><h2>Simulación pausada</h2><p>La nave está congelada en el instante actual. Reanuda cuando estés listo o vuelve al centro de vuelo.</p><div class="dialog-actions"><button class="primary" id="resume">Reanudar</button><button class="secondary" id="abort">Salir</button></div></div>
+  </div>
+  <div class="overlay hidden" id="result-dialog">
+    <div class="dialog"><div class="eyebrow" id="result-label">Misión completada</div><h2 id="result-title">Toma nominal.</h2><p id="result-text"></p><div class="score-strip"><div><span>Puntuación</span><b id="r-score">0</b></div><div><span>Combustible</span><b id="r-fuel">0%</b></div><div><span>Precisión</span><b id="r-precision">0%</b></div></div><div class="dialog-actions"><button class="primary" id="next-mission">Siguiente nivel</button><button class="secondary" id="back-menu">Centro de vuelo</button></div></div>
+  </div>
+  <div class="overlay hidden" id="surface-dialog">
+    <div class="dialog surface-dialog">
+      <header class="surface-head"><div><div class="eyebrow">Operaciones de superficie</div><h2 id="surface-title">Complejo · Tierra</h2><p id="surface-copy">Escanea el terreno, recupera materiales y ensambla el área de lanzamiento por etapas.</p></div><button class="surface-close" id="surface-close" aria-label="Cerrar operaciones de superficie">✕</button></header>
+      <div class="surface-grid">
+        <section class="scanner-panel"><div class="ops-title"><h3>Escáner geológico</h3><button class="scan-button" id="scan">INICIAR BARRIDO</button></div><div class="scanner-field" id="scanner-field"><div class="scan-empty" id="scan-empty">Ejecuta un barrido para localizar depósitos.<br>Selecciona cada señal para recuperar el material.</div></div><p class="scan-readout" id="scan-readout" aria-live="polite">Sin señales activas.</p></section>
+        <section class="inventory-panel"><div class="ops-title"><h3>Inventario local</h3><span class="difficulty" id="build-progress">0/3 MÓDULOS</span></div><div class="inventory"><div><span id="metal-label">Metal</span><b id="inv-metal">0</b></div><div><span id="silicate-label">Silicato</span><b id="inv-silicate">0</b></div><div><span id="volatile-label">Volátiles</span><b id="inv-volatile">0</b></div></div><div class="build-list" id="build-list"></div><p class="ops-note">Cada planeta ofrece una mezcla distinta. Los recursos se usan solo en la base del mundo donde fueron extraídos.</p></section>
+      </div>
+    </div>
+  </div>
+  <div id="unsupported" class="hidden"><div><h1>El motor 3D no pudo iniciar</h1><p>Este simulador necesita WebGL y acceso a la biblioteca gráfica. Prueba abrirlo en un navegador moderno con aceleración gráfica activada.</p></div></div>
+
+  <script src="lib/three.min.js"></script>
+  <div id="cz"><canvas id="c"></canvas>
+<div id="top"><span id="pn"></span><div id="chips"></div><div id="fuelbox"><i id="fb"></i><span id="ft"></span></div><button class="s" id="rs">Nueva partida</button></div>
+<div id="bot"><div id="hint"></div><div id="tools"></div></div>
+<div id="dlg" class="h"><div class="card"><h2>Lanzamiento</h2><ul id="chk"></ul><div id="dest"></div><button class="s" id="cl">Cerrar</button></div></div>
+<div id="toast" class="h"></div><div id="tv" class="h"><b id="tvt"></b><i id="tvb"></i></div>
+</div>
+<script src="js/boot.js?v=20261015-mobile-e-v2"></script>
+</body>
+</html>

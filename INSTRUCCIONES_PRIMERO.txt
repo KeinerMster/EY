@@ -1,0 +1,11 @@
+COSMODROMO - INSTALACION AUTOMATICA
+
+SOLO HAZ ESTO:
+1. Extrae esta carpeta completa en Escritorio o Descargas.
+2. Haz doble clic en INICIAR_COSMODROMO.bat.
+3. Si Windows pregunta por Firewall, autoriza solo redes privadas. No autorices redes publicas.
+4. Espera a que se abra el navegador del PC. Para jugar desde el movil, conectalo a la misma Wi-Fi y abre una URL http://IP:PUERTO que aparecera en la ventana del servidor.
+
+Node.js, npm y las dependencias se preparan solos. Si Node.js no esta instalado, se descarga la version LTS oficial y se verifica su SHA-256 antes de usarla. El iniciador prefiere runtime\node\node.exe y ya no depende de que node-path.txt exista. No modifica el PATH global de Windows.
+
+Necesitas Internet en el primer inicio. No ejecutes el juego desde la vista interna del ZIP: extrae todos los archivos primero. No cierres la ventana "Servidor Cosmodromo" mientras juegas desde el telefono. No uses localhost en el movil: utiliza la direccion IP que muestra el servidor.

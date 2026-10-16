@@ -1,0 +1,24 @@
+COSMODROMO - INICIO AUTOMATICO Y PRUEBA DESDE EL MOVIL
+
+PRIMER ARRANQUE (PC WINDOWS)
+1. Extrae el ZIP entero en una carpeta normal.
+2. Haz doble clic en INICIAR_COSMODROMO.bat (o Jugar.bat).
+3. Si falta Node.js, el iniciador descarga el paquete LTS oficial, comprueba la SHA-256 y guarda el runtime dentro de la carpeta del juego.
+4. El iniciador selecciona runtime\node\node.exe cuando existe; si no, usa la ruta detectada del archivo node-path.txt o una version compatible ya instalada. No necesita node-path.txt si el runtime portatil esta presente.
+5. Si Windows pregunta por Firewall, permite el servidor solo en redes privadas de confianza. La regla de Cosmódromo esta limitada a la subred local y puertos TCP 3000-3099.
+6. Las dependencias del juego se instalan automaticamente. Necesitas Internet la primera vez.
+
+PROBAR EN EL TELEFONO
+1. Deja abierta la ventana "Servidor Cosmodromo".
+2. Conecta el movil a la misma Wi-Fi del PC.
+3. Busca en la ventana una URL completa como http://192.168.1.25:3000 y abre la direccion real que aparezca.
+4. No uses localhost en el movil. El PC debe permanecer encendido con el servidor abierto.
+
+CONTROLES PC
+WASD mover | raton mirar | clic izquierdo picar | clic derecho construir/poner | E inventario (I alternativo) | Espacio saltar | Mayus correr | 1-9 barra rapida.
+
+CONTROLES MOVIL
+Arrastra sobre el terreno para mirar | pad izquierdo para moverte | PICAR | PONER | INVENTARIO | SALTAR | CORRER.
+
+SEGURIDAD
+El iniciador crea una regla de red privada para node.exe en la subred local y puertos TCP 3000-3099. No abre puertos en el router ni publica el juego en Internet.
